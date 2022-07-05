@@ -1,0 +1,7 @@
+image: haskell:8.4.4
+
+pipelines:
+  default:
+    - step:
+        script:
+          - stack test

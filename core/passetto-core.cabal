@@ -1,0 +1,47 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 1af76fac2bcc0bcb00c537d046f8cb5c31dd5a9fc3eb727c9cb8ee85b74967b8
+
+name:           passetto-core
+version:        0.1.0
+synopsis:       Core functionality for encryption service
+description:    Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+category:       Cryptography
+homepage:       https://github.com/juspay/passetto#readme
+bug-reports:    https://github.com/juspay/passetto/issues
+author:         Juspay
+maintainer:     Juspay
+copyright:      2020 Juspay
+license:        BSD-3-Clause
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/juspay/passetto
+
+library
+  exposed-modules:
+      Passetto.Util
+      Passetto.Web.Routes
+      Passetto.Web.Types
+  other-modules:
+      Paths_passetto_core
+  hs-source-dirs:
+      src
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude
+  build-depends:
+      aeson
+    , aeson-casing
+    , base >=4.7 && <5
+    , base64-bytestring
+    , servant
+    , universum
+  default-language: Haskell2010

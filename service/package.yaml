@@ -1,0 +1,88 @@
+<<: !include "../hpack/module.yaml"
+
+name:                passetto-service
+synopsis:            HTTP based Encryption Service
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+
+flags:
+  pg-backend:
+    description:  Use Postgresql backend instead of AcidState
+    default:      True
+    manual:       True
+
+dependencies:
+- base >= 4.7 && < 5
+- universum
+
+when:
+- condition: flag(pg-backend)
+  then:
+    dependencies: [postgresql-simple]
+  else:
+    dependencies: [acid-state, safecopy]
+
+library:
+  <<: *lib-common
+  when:
+  - condition: flag(pg-backend)
+    then:
+      source-dirs: src_pg
+    else:
+      source-dirs: src_as
+  dependencies:
+  - aeson
+  - binary
+  - bytestring
+  - cryptonite
+  - cryptostore
+  - haskeline
+  - exceptions
+  - memory
+  - mtl
+  - passetto-core
+  - saltine >= 0.1.1.0  # has Generic instances for keys
+  - safe-exceptions
+  - servant-server
+  - semver
+  - text
+  - vector
+  - random
+  - x509
+  - pem
+  - warp
+  - warp-tls
+  - wai
+
+executables:
+  passetto-server:
+    <<: *exec-common
+    main:                Main.hs
+    source-dirs:         app/server
+    dependencies:
+    - passetto-service
+    - exceptions
+    - safe-exceptions
+
+  passetto-init:
+    <<: *exec-common
+    main:                KeysDb.hs
+    source-dirs:         app/init
+    ghc-options:
+    - -main-is KeysDb
+    dependencies:
+    - passetto-service
+    - saltine
+
+  passetto-init-interactive:
+    main:                KeysDbInteractive.hs
+    source-dirs:         app/init
+    ghc-options:
+    - -main-is KeysDbInteractive
+    dependencies:
+    - passetto-service
+    - saltine

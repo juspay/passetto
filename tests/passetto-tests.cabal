@@ -1,0 +1,61 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 37b099421a6a40b3b92430d5e92d83b9851e37612c770c79a19b963690365372
+
+name:           passetto-tests
+version:        0.1.0
+synopsis:       Various tests for passetto service
+description:    Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+category:       Cryptography
+homepage:       https://github.com/juspay/passetto#readme
+bug-reports:    https://github.com/juspay/passetto/issues
+author:         Juspay
+maintainer:     Juspay
+copyright:      2020 Juspay
+license:        BSD-3-Clause
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/juspay/passetto
+
+test-suite passetto-test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Spec
+      Test.Passetto.ClientSpec
+      Test.Passetto.CryptoSpec
+      Test.Passetto.PayloadEncryptionSpec
+      Test.Passetto.Util
+      Paths_passetto_tests
+  hs-source-dirs:
+      test
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      tasty-discover:tasty-discover
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , hedgehog
+    , hspec
+    , hspec-hedgehog
+    , http-client
+    , memory
+    , passetto-client
+    , passetto-service
+    , saltine
+    , semver
+    , servant-client
+    , servant-client-core
+    , universum
+    , unordered-containers
+    , warp
+  default-language: Haskell2010

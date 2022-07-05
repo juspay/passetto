@@ -1,0 +1,162 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 151d98ce5cd7a5ce290b2e85731e50e4529057cad28d9e126dc8c79531198783
+
+name:           passetto-service
+version:        0.1.0
+synopsis:       HTTP based Encryption Service
+description:    Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+category:       Cryptography
+homepage:       https://github.com/juspay/passetto#readme
+bug-reports:    https://github.com/juspay/passetto/issues
+author:         Juspay
+maintainer:     Juspay
+copyright:      2020 Juspay
+license:        BSD-3-Clause
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/juspay/passetto
+
+flag pg-backend
+  description: Use Postgresql backend instead of AcidState
+  manual: True
+  default: True
+
+library
+  exposed-modules:
+      Passetto.Crypto
+      Passetto.Db
+      Passetto.HandlePassword
+      Passetto.JsonEncryption
+      Passetto.KeysContext
+      Passetto.Version
+      Passetto.Web.Handlers
+      Passetto.Web.Server
+  other-modules:
+      Paths_passetto_service
+  hs-source-dirs:
+      src
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , binary
+    , bytestring
+    , cryptonite
+    , cryptostore
+    , exceptions
+    , haskeline
+    , memory
+    , mtl
+    , passetto-core
+    , pem
+    , random
+    , safe-exceptions
+    , saltine >=0.1.1.0
+    , semver
+    , servant-server
+    , text
+    , universum
+    , vector
+    , wai
+    , warp
+    , warp-tls
+    , x509
+  if flag(pg-backend)
+    build-depends:
+        postgresql-simple
+  else
+    build-depends:
+        acid-state
+      , safecopy
+  if flag(pg-backend)
+    other-modules:
+        Passetto.DbType
+    hs-source-dirs:
+        src_pg
+  else
+    other-modules:
+        Passetto.DbType
+    hs-source-dirs:
+        src_as
+  default-language: Haskell2010
+
+executable passetto-init
+  main-is: KeysDb.hs
+  other-modules:
+      KeysDbInteractive
+      Paths_passetto_service
+  hs-source-dirs:
+      app/init
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude -main-is KeysDb
+  build-depends:
+      base >=4.7 && <5
+    , passetto-service
+    , saltine
+    , universum
+  if flag(pg-backend)
+    build-depends:
+        postgresql-simple
+  else
+    build-depends:
+        acid-state
+      , safecopy
+  default-language: Haskell2010
+
+executable passetto-init-interactive
+  main-is: KeysDbInteractive.hs
+  other-modules:
+      KeysDb
+      Paths_passetto_service
+  hs-source-dirs:
+      app/init
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude -main-is KeysDbInteractive
+  build-depends:
+      base >=4.7 && <5
+    , passetto-service
+    , saltine
+    , universum
+  if flag(pg-backend)
+    build-depends:
+        postgresql-simple
+  else
+    build-depends:
+        acid-state
+      , safecopy
+  default-language: Haskell2010
+
+executable passetto-server
+  main-is: Main.hs
+  other-modules:
+      WebOptions
+      Paths_passetto_service
+  hs-source-dirs:
+      app/server
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , exceptions
+    , passetto-service
+    , safe-exceptions
+    , universum
+  if flag(pg-backend)
+    build-depends:
+        postgresql-simple
+  else
+    build-depends:
+        acid-state
+      , safecopy
+  default-language: Haskell2010

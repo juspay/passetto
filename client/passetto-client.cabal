@@ -1,0 +1,61 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: bd36eb19efb8a13e9bf08610c816324ee3d8c042d45132cbc1c51440ecef7a9a
+
+name:           passetto-client
+version:        0.1.0
+synopsis:       Client methods for working with passetto service
+description:    Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+category:       Cryptography
+homepage:       https://github.com/juspay/passetto#readme
+bug-reports:    https://github.com/juspay/passetto/issues
+author:         Juspay
+maintainer:     Juspay
+copyright:      2020 Juspay
+license:        BSD-3-Clause
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/juspay/passetto
+
+library
+  exposed-modules:
+      Passetto.Client
+      Passetto.Client.Bulk
+      Passetto.Client.Context
+      Passetto.Client.EncryptedItem
+      Passetto.Client.Error
+      Passetto.Client.Methods
+      Passetto.Client.Util
+      Passetto.Web.Client
+  other-modules:
+      Paths_passetto_client
+  hs-source-dirs:
+      src
+  default-extensions: AllowAmbiguousTypes BangPatterns ConstraintKinds DataKinds DefaultSignatures DeriveDataTypeable DerivingStrategies DeriveGeneric DuplicateRecordFields EmptyCase FlexibleContexts FlexibleInstances FunctionalDependencies GeneralizedNewtypeDeriving LambdaCase MultiParamTypeClasses MultiWayIf NamedFieldPuns NoImplicitPrelude OverloadedStrings RankNTypes RecordWildCards ScopedTypeVariables StandaloneDeriving TemplateHaskell TupleSections TypeFamilies UndecidableInstances ViewPatterns TypeApplications TypeOperators
+  ghc-options: -Weverything -Wno-missing-exported-signatures -Wno-missing-import-lists -Wno-missed-specialisations -Wno-all-missed-specialisations -Wno-unsafe -Wno-safe -Wno-missing-local-signatures -Wno-monomorphism-restriction -Wno-implicit-prelude
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , connection
+    , exceptions
+    , http-client
+    , http-client-tls
+    , mtl
+    , passetto-core
+    , servant
+    , servant-client
+    , servant-client-core
+    , universum
+    , wai
+    , warp
+    , warp-tls
+  default-language: Haskell2010

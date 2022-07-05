@@ -1,0 +1,6 @@
+Dockerfile
+.dockerignore
+
+**/.stack-work
+**/*.cabal
+**/*.md

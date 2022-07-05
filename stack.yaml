@@ -1,0 +1,15 @@
+resolver: lts-15.15
+
+packages:
+- core
+- service
+- client
+- tests
+
+extra-deps:
+- acid-state-0.16.0.1
+- cryptostore-0.2.1.0
+- hedgehog-1.0.2
+- hspec-hedgehog-0.0.1.2
+- libsodium-1.0.18.1
+- saltine-0.1.1.0

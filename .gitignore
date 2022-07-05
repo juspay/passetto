@@ -1,0 +1,10 @@
+# Build tools
+## Stack
+.stack-work/
+
+## Cabal
+dist
+dist-*
+
+## Acid-state
+state/

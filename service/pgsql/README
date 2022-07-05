@@ -1,0 +1,4 @@
+You shall set "PASSETTO_PG_BACKEND_CONN_STRING" environment variable to
+the valid Postgresql connection string for your database instance, e.g
+
+`export PASSETTO_PG_BACKEND_CONN_STRING="port=5432 dbname='postgres' user='postgres' password='postgres'"`

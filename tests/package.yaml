@@ -1,0 +1,31 @@
+<<: !include "../hpack/module.yaml"
+
+name:                passetto-tests
+synopsis:            Various tests for passetto service
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+
+tests:
+  passetto-test:
+    <<: *test-common
+    main:                Main.hs
+    source-dirs:         test
+    dependencies:
+    - universum
+    - passetto-service
+    - passetto-client
+    - aeson
+    - hspec
+    - http-client
+    - hedgehog
+    - hspec-hedgehog
+    - memory
+    - saltine
+    - semver
+    - servant-client
+    - servant-client-core
+    - unordered-containers
+    - warp

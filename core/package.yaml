@@ -1,0 +1,21 @@
+<<: !include "../hpack/module.yaml"
+
+name:                passetto-core
+synopsis:            Core functionality for encryption service
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- aeson-casing
+- base64-bytestring
+- servant
+- universum
+
+library:
+  <<: *lib-common

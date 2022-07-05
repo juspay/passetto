@@ -1,0 +1,30 @@
+<<: !include "../hpack/module.yaml"
+
+name:                passetto-client
+synopsis:            Client methods for working with passetto service
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/juspay/passetto#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- connection
+- exceptions
+- http-client
+- http-client-tls
+- mtl
+- passetto-core
+- servant
+- servant-client
+- servant-client-core
+- universum
+- warp
+- warp-tls
+- wai
+
+library:
+  <<: *lib-common
