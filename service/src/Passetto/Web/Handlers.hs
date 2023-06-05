@@ -37,12 +37,12 @@ appHandlers = AppEndpoints
       return (EncBody res)
 
   , eGetKey = \idx -> do
-      (_, pub) <- getKeyOrThrow idx
-      return $ encodeBase64 (Saltine.encode pub)
+      keyPair <- getKeyOrThrow idx
+      return $ encodeBase64 (Saltine.encode $ Box.publicKey keyPair)
 
   , eGetKeyCert = \idx -> do
-      (_, pub) <- getKeyOrThrow idx
-      return $ decodeUtf8 $ publicToPem pub
+      keyPair <- getKeyOrThrow idx
+      return $ decodeUtf8 $ publicToPem $ Box.publicKey keyPair
 
   , eStatus = getServiceStatus
   }
