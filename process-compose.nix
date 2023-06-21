@@ -11,6 +11,7 @@ in
       type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "Enable passetto service";
+          package = lib.mkPackageOption pkgs "passetto" { default = null; };
           pgurl = lib.mkOption {
             type = lib.types.str;
             default = "postgresql://${userName}@${pgcfg.listen_addresses}:${builtins.toString pgcfg.port}/${dbName}";
@@ -46,10 +47,27 @@ in
         ];
       };
       settings = {
-        processes."${srvname}-pgweb" = lib.mkIf cfg.pgweb.enable {
-          environment.PGWEB_DATABASE_URL = cfg.pgurl;
-          command = pkgs.pgweb;
-          depends_on."passetto-db".condition = "process_healthy";
+        processes = {
+          "${srvname}-pgweb" = lib.mkIf cfg.pgweb.enable {
+            environment.PGWEB_DATABASE_URL = cfg.pgurl;
+            command = pkgs.pgweb;
+            depends_on."${srvname}-db".condition = "process_healthy";
+          };
+          passetto-service = { name, ... }: {
+            environment.PASSETTO_PG_BACKEND_CONN_STRING = cfg.pgurl;
+            depends_on."${srvname}-db".condition = "process_healthy";
+            command = pkgs.writeShellApplication {
+              inherit name; 
+              text = ''
+                export PATH=${cfg.package}/bin:$PATH
+                set -x
+                password="1"
+                keys=3
+                passetto-init $password $keys
+                MASTER_PASSWORD=$password passetto-server
+              '';
+            };
+          };
         };
       };
     };

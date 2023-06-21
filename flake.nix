@@ -15,7 +15,7 @@
         inputs.process-compose-flake.flakeModule
       ];
 
-      perSystem = { self', pkgs, ... }: {
+      perSystem = { config, self', pkgs, lib, ... }: {
         haskellProjects.default = { };
         process-compose."default" = {
           imports = [
@@ -24,6 +24,7 @@
           ];
           services.passetto = {
             enable = true;
+            package = lib.getBin self'.packages.passetto-service;
             pgweb.enable = true;
           };
         };
