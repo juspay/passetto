@@ -13,3 +13,4 @@ state/
 result
 result-*
 .direnv
+/data
