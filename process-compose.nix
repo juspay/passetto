@@ -11,7 +11,7 @@ in
       type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "Enable passetto service";
-          package = lib.mkPackageOption pkgs "passetto" { default = null; };
+          package = lib.mkPackageOption pkgs.haskellPackages "passetto-service" { };
           pgurl = lib.mkOption {
             type = lib.types.str;
             default = "postgresql://${userName}@${pgcfg.listen_addresses}:${builtins.toString pgcfg.port}/${dbName}";
@@ -57,7 +57,7 @@ in
             environment.PASSETTO_PG_BACKEND_CONN_STRING = cfg.pgurl;
             depends_on."${srvname}-db".condition = "process_healthy";
             command = pkgs.writeShellApplication {
-              inherit name; 
+              inherit name;
               text = ''
                 export PATH=${cfg.package}/bin:$PATH
                 set -x

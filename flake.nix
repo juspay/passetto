@@ -11,12 +11,18 @@
     flake-parts.lib.mkFlake { inherit inputs; } ({ self, ... }: {
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
         inputs.haskell-flake.flakeModule
         inputs.process-compose-flake.flakeModule
       ];
 
-      perSystem = { config, self', pkgs, lib, ... }: {
+      perSystem = { config, self', pkgs, system, lib, ... }: {
         haskellProjects.default = { };
+
+        overlayAttrs = {
+          passetto-service = lib.getBin self'.packages.passetto-service;
+        };
+
         process-compose."default" = {
           imports = [
             inputs.services-flake.processComposeModules.default
