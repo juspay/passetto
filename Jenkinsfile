@@ -12,7 +12,8 @@ pipeline {
                 axes {
                     axis {
                         name 'SYSTEM'
-                        values 'x86_64-linux', 'aarch64-darwin', 'x86_64-darwin'
+                        // passetto doesn't build on m1 mac; https://github.com/juspay/passetto/issues/2
+                        values 'x86_64-linux', 'x86_64-darwin'
                     }
                 }
                 stages {
