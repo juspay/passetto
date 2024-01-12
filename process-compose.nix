@@ -70,7 +70,7 @@ in
         processes = {
           "${srvname}-pgweb" = lib.mkIf cfg.pgweb.enable {
             environment.PGWEB_DATABASE_URL = cfg.pgurl;
-            environment.PORT = cfg.port;
+            environment.PORT = builtins.toString cfg.port;
             command = pkgs.pgweb;
             depends_on."${srvname}-db".condition = "process_healthy";
           };
