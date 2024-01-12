@@ -18,16 +18,13 @@ in
             description = "Postgres connection string";
           };
           pgweb.enable = lib.mkEnableOption "Enable pgweb on passetto db";
-          initialScript = lib.mkOption {
-            type = lib.types.str;
-            default = "";
-            description = ''
-              Initial SQL Commands to run during databse initialization. This can be multiple 
-              SQL expressions separated by a semi-colon.
-              '';
+          initialDumps = lib.mkOption {
+            type = lib.types.listOf lib.types.path;
+            default = [ ];
+            description = ''List of SQL dumps to run during the database initialization.
+              These dumps are loaded after `initalScript` and `initialDatabases`.'';
             example = lib.literalExpression ''
-              CREATE USER postgres SUPERUSER;
-              CREATE USER bar;
+              [ ./foo.sql ./bar.sql ]
             '';
           };
         };
@@ -54,7 +51,8 @@ in
         initialScript.before = ''
           CREATE ROLE ${userName} SUPERUSER;
           ALTER ROLE ${userName} WITH LOGIN;
-        '' + "\n" + cfg.initialScript;
+        '';
+        initialDumps = cfg.initialDumps;
         initialDatabases = [
           {
             name = dbName;
