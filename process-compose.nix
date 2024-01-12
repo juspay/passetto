@@ -18,27 +18,20 @@ in
             description = "Postgres connection string";
           };
           pgweb.enable = lib.mkEnableOption "Enable pgweb on passetto db";
-          passetto-db-port = lib.mkOption {
-            type = lib.types.port;
-            default = 5432;
-            description = ''
-              The TCP port to accept connections for Passetto-db.
-            '';
-          };
-          passetto-server-port = lib.mkOption {
+          port = lib.mkOption {
             type = lib.types.port;
             default = 8012;
             description = ''
-              The TCP port to accept connections for Passetto Server.
+              The TCP port to accept connections.
             '';
           };
-          initialDumps = lib.mkOption {
-            type = lib.types.listOf lib.types.path;
-            default = [ ];
-            description = ''List of SQL dumps to run during the database initialization.
-              These dumps are loaded after `initalScript` and `initialDatabases`.'';
-            example = lib.literalExpression ''
-              [ ./foo.sql ./bar.sql ]
+          extraDbSettings = lib.mkOption { 
+            type = lib.types.deferredModule; 
+            default = { 
+              port = 8012;
+            };
+            description = ''
+             Module for configuring Extra Db settings.
             '';
           };
         };
@@ -51,8 +44,9 @@ in
     in
     lib.mkIf cfg.enable {
       services.postgres."${srvname}-db" = {
+        imports = [ cfg.extraDbSettings ];
         enable = true;
-        port = cfg.passetto-db-port;
+        port = lib.mkDefault 8012;
         listen_addresses = "127.0.0.1";
         hbaConf = [
           # Equivalent to `POSTGRES_INITDB_ARGS = "--auth=scram-sha-256";`, sets the auth for all users
@@ -67,7 +61,6 @@ in
           CREATE ROLE ${userName} SUPERUSER;
           ALTER ROLE ${userName} WITH LOGIN;
         '';
-        initialDumps = cfg.initialDumps;
         initialDatabases = [
           {
             name = dbName;
@@ -79,7 +72,7 @@ in
         processes = {
           "${srvname}-pgweb" = lib.mkIf cfg.pgweb.enable {
             environment.PGWEB_DATABASE_URL = cfg.pgurl;
-            environment.PORT = cfg.passetto-server-port;
+            environment.PORT = cfg.port;
             command = pkgs.pgweb;
             depends_on."${srvname}-db".condition = "process_healthy";
           };
