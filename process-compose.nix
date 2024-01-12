@@ -27,11 +27,9 @@ in
           };
           extraDbSettings = lib.mkOption { 
             type = lib.types.deferredModule; 
-            default = { 
-              port = 8012;
-            };
+            default = { };
             description = ''
-             Module for configuring Extra Db settings.
+             Extra Postgres database settings.
             '';
           };
         };
