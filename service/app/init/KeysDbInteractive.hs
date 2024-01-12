@@ -5,6 +5,7 @@ import System.Environment (getArgs)
 
 import Passetto.Crypto (encode)
 import Passetto.Db (openDb, appendDbInteractive, readAndDecryptDbInteractive, changePasswordInteractive)
+import qualified Crypto.Saltine.Core.Box as Box
 
 main :: IO ()
 main = do
@@ -12,7 +13,7 @@ main = do
     let
       doit ["addkeys", nstr]
         | Just n <- readMaybe nstr = appendDbInteractive n db >>= print
-      doit ["dump"] = readAndDecryptDbInteractive db >>= either print (mapM_ (print . bimap encode encode) . toList)
+      doit ["dump"] = readAndDecryptDbInteractive db >>= either print (mapM_ (print . bimap encode encode . (Box.secretKey &&& Box.publicKey)) . toList)
       doit ["newpass"] = changePasswordInteractive db >>= print
       doit _ = putStrLn @String logo
     getArgs >>= doit

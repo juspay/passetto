@@ -49,6 +49,7 @@ import qualified Data.X509 as X509
 
 import qualified Data.Binary as B
 import qualified Data.ByteString.Lazy as LBS (fromStrict, toStrict)
+import Crypto.Saltine.Internal.SecretBox (secretbox_keybytes)
 
 -- Utils, move elsewhere
 instance B.Binary Box.SecretKey
@@ -118,7 +119,7 @@ decryptMasterKey (EncryptedKey{..}, emkKdfSalt) password =
 -- Derives a key for encrypting master.
 mkEncryptionKey :: ByteString -> Password -> SecretBox.Key
 mkEncryptionKey salt (Password pw) = do
-  let skBs = Argon2.hash keyDerivationOptions pw salt Sizes.secretBoxKey
+  let skBs = Argon2.hash keyDerivationOptions pw salt secretbox_keybytes
            & throwCryptoError  -- fails only when parameters are incorrect
   Saltine.decode skBs ?: error "Illegal secret box key size"
 
@@ -132,10 +133,10 @@ keyDerivationOptions = Argon2.defaultOptions
 -- | Encrypt a key for further saving in storage.
 encryptKey :: MonadIO m => SecretBox.Key -> Box.Keypair -> m EncryptedKey
 encryptKey mk k =
-  liftIO $ encryptKeyInternal mk (encodeStrict k)
+  liftIO $ encryptKeyInternal mk (encodeStrict . (Box.secretKey &&& Box.publicKey) $ k)
 
 decryptKey :: SecretBox.Key -> EncryptedKey -> Maybe Box.Keypair
-decryptKey mk EncryptedKey{..} = decodeStrict <$> SecretBox.secretboxOpen mk emkNonce emkSecret
+decryptKey mk EncryptedKey{..} = uncurry Box.Keypair . decodeStrict <$> SecretBox.secretboxOpen mk emkNonce emkSecret
 
 -- | Encrypt a user message.
 encrypt :: MonadIO m => Box.PublicKey -> ByteString -> m ByteString
@@ -143,7 +144,7 @@ encrypt k msg = liftIO $ Box.boxSeal k msg
 
 -- | Decrypt a user message.
 decrypt :: Box.Keypair -> ByteString -> Maybe ByteString
-decrypt (kSecret, kPublic) enc = Box.boxSealOpen kPublic kSecret enc
+decrypt pair = Box.boxSealOpen (Box.publicKey pair) (Box.secretKey pair)
 
 -- | Dump a public key into X.509 certificate.
 publicToPem :: Box.PublicKey -> LByteString

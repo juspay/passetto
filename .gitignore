@@ -8,3 +8,9 @@ dist-*
 
 ## Acid-state
 state/
+
+# Nix
+result
+result-*
+.direnv
+/data

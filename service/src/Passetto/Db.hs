@@ -7,7 +7,7 @@ module Passetto.Db
   ) where
 
 import Data.Vector (fromList)
-import Universum
+import Universum hiding (fromList)
 
 import qualified Crypto.Saltine.Core.Box as Box
 import qualified Crypto.Saltine.Core.SecretBox as SecretBox

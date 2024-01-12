@@ -20,6 +20,7 @@ import Servant (ServerError(..), err410, err422)
 import qualified Passetto.Crypto as Crypto
 import Passetto.KeysContext
 import Passetto.Util (decodeBase64, encodeBase64)
+import qualified Crypto.Saltine.Core.Box as Box
 
 data DecryptError
   = InvalidEncryptedData
@@ -41,7 +42,7 @@ encryptPayload :: (MonadIO m, HasKeysContext m) => Text -> m Text
 encryptPayload msg = do
   ver <- getModelVersion
   (idx, keypair) <- getRandomKey
-  encrypted <- Crypto.encrypt (snd keypair) (encodeUtf8 msg)
+  encrypted <- Crypto.encrypt (Box.publicKey keypair) (encodeUtf8 msg)
   return . toText . mconcat $ intersperse "|"
     [ V.toLazyText ver
     , toLText $ show @Text idx
