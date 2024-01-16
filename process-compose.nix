@@ -62,7 +62,7 @@ in
         initialDatabases = [
           {
             name = dbName;
-            schema = ./service/pgsql/create_schema.sql;
+            schemas = [ ./service/pgsql/create_schema.sql ];
           }
         ];
       };
@@ -70,12 +70,12 @@ in
         processes = {
           "${srvname}-pgweb" = lib.mkIf cfg.pgweb.enable {
             environment.PGWEB_DATABASE_URL = cfg.pgurl;
-            environment.PORT = builtins.toString cfg.port;
             command = pkgs.pgweb;
             depends_on."${srvname}-db".condition = "process_healthy";
           };
           passetto-service = { name, ... }: {
             environment.PASSETTO_PG_BACKEND_CONN_STRING = cfg.pgurl;
+            environment.PORT = builtins.toString cfg.port;
             depends_on."${srvname}-db".condition = "process_healthy";
             command = pkgs.writeShellApplication {
               inherit name;
